@@ -1,0 +1,28 @@
+{
+  "type": "module",
+  "name": "alchemy-account-kit-sample",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "dependencies": {
+    "@alchemy/aa-accounts": "^1.2.0",
+    "@alchemy/aa-alchemy": "^1.2.0",
+    "@alchemy/aa-core": "^1.2.0",
+    "alchemy-sdk": "^3.0.0",
+    "dotenv": "^16.3.1",
+    "viem": "^1.21.4"
+  },
+  "scripts": {
+    "sendeth": "tsx scripts/sendeth.ts",
+    "sendeth_withpm": "tsx scripts/sendeth_withpm.ts",
+    "sendeth_withpm_polygon": "tsx scripts/sendeth_withpm_polygon.ts",
+    "sendeth_polygonmumbai": "tsx scripts/sendeth_polygonmumbai.ts"
+  },
+  "devDependencies": {
+    "ts-node": "^10.9.1",
+    "tsx": "^3.14.0",
+    "typescript": "^5.2.2"
+  },
+  "repository": "git@code.alipay.com:boqiang.zbq/alchemy-account-kit-sample.git",
+  "author": "boqiang.zbq <boqiang.zbq@antfin.com>"
+}
