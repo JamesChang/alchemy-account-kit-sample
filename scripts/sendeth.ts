@@ -19,6 +19,8 @@ const chainMap = new Map([
   ['sepolia', chains.sepolia],
   ['mainnet', chains.mainnet],
   ['goerli', chains.goerli],
+  ['polygonMumbai', chains.polygonMumbai],
+  ['polygon', chains.polygon],
 ]);
 function getChainByName(name: string): any {
   const chain = chainMap.get(name);
