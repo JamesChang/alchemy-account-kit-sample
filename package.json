@@ -5,9 +5,9 @@
   "main": "index.js",
   "license": "MIT",
   "dependencies": {
-    "@alchemy/aa-accounts": "^1.2.0",
-    "@alchemy/aa-alchemy": "^1.2.0",
-    "@alchemy/aa-core": "^1.2.0",
+    "@alchemy/aa-accounts": "^2.0",
+    "@alchemy/aa-alchemy": "^2.0",
+    "@alchemy/aa-core": "^2.0",
     "alchemy-sdk": "^3.0.0",
     "dotenv": "^16.3.1",
     "viem": "^1.21.4"
