@@ -47,13 +47,14 @@ const entryPointAddress = getDefaultEntryPointAddress(chain)
 const targetAddress = "0x136aF0A9155d89CD428E8f292F79D74a69B38E0f"; // Replace with the desired target address
 
 
+const min_tip_n = process.env.MIN_TIP_N ? BigInt(process.env.MIN_TIP_N) : 10_000_000n;
 const userOperationFeeOptions: UserOperationFeeOptions = {
   maxPriorityFeePerGas: {
-    min: 10_000_000n,
+    min: min_tip_n,
     percentage: 20,
   },
   maxFeePerGas: {
-    percentage: 100,
+    percentage: 50,
   }
 };
 
