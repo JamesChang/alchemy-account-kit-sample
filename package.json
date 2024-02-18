@@ -16,7 +16,8 @@
     "sendeth": "tsx scripts/sendeth.ts",
     "sendeth_withpm": "tsx scripts/sendeth_withpm.ts",
     "sendeth_withpm_polygon": "tsx scripts/sendeth_withpm_polygon.ts",
-    "sendeth_polygonmumbai": "tsx scripts/sendeth_polygonmumbai.ts"
+    "sendeth_polygonmumbai": "tsx scripts/sendeth_polygonmumbai.ts",
+    "simple": "tsx scripts/simple.ts"
   },
   "devDependencies": {
     "ts-node": "^10.9.1",

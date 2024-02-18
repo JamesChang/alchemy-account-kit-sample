@@ -1,5 +1,4 @@
 // importing required dependencies
-import { AlchemyProvider } from "@alchemy/aa-alchemy";
 import {
   LightSmartContractAccount,
   getDefaultLightAccountFactoryAddress,
@@ -42,7 +41,6 @@ if (!private_key) {
     throw new Error(`Invalid private key`);
 }
 const eoaSigner: SmartAccountSigner = LocalAccountSigner.privateKeyToAccountSigner(private_key); // Create a signer for your EOA
-
 const entryPointAddress = getDefaultEntryPointAddress(chain)
 const targetAddress = "0x136aF0A9155d89CD428E8f292F79D74a69B38E0f"; // Replace with the desired target address
 
@@ -81,26 +79,52 @@ const provider = new SmartAccountProvider({
 // Logging the smart account address -- please fund this address with some SepoliaETH in order for the user operations to be executed successfully
 provider.getAddress().then((address: string) => console.log("YOUR ACCOUNT:", address));
 
+
+// Define the DummyPaymasterDataMiddlewareOverrideFunction
+const DummyPaymasterDataMiddlewareOverrideFunction = async (uoStruct) => {
+  // Return an object like {paymasterAndData: "0x..."} where "0x..." is the valid paymasterAndData for your paymaster contract (used in gas estimation)
+  // You can even hardcode these dummy singatures
+  // You can read up more on dummy signatures here: https://www.alchemy.com/blog/dummy-signatures-and-gas-token-transfers
+  const userOpDataOverrides = {
+    paymasterAndData : "0x7915e08ec9e1e4b08b1ac0b086a568fe5d3ba3220000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000006575be1ff188fa178364105814dc4bf270fc20175857d63661d18f12ae3a39d1ae13562e5fa5e68582e8669243e2f63e5b2b22b878ca24e987426558cc280c94556f1e921b",
+  }
+
+  return userOpDataOverrides;
+};
+
+// Define the PaymasterDataMiddlewareOverrideFunction
+const PaymasterDataMiddlewareOverrideFunction = async (uoStruct) => {
+  // paymasterAndData = paymasterAddress ++ validUtil ++ validAfter ++ signature
+  const userOpDataOverrides = {
+    paymasterAndData : "0x7915e08ec9e1e4b08b1ac0b086a568fe5d3ba3220000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000006575be1f4c481015739ec1d4dc5626458b185615a9785328f30aedd702e45ad7870dd89d6ee47f11635fde40f0a403d31c66de649f520140c71ed2fb17171f262b312d301b",
+    maxFeePerGas: 233879061166n,
+    maxPriorityFeePerGas:10000000,
+    callGasLimit:9100,
+    verificationGasLimit:102877,
+    preVerificationGas:48312,
+  }
+
+  return userOpDataOverrides;
+};
+
+provider.withPaymasterMiddleware({
+  dummyPaymasterDataMiddleware: DummyPaymasterDataMiddlewareOverrideFunction,
+  paymasterDataMiddleware: PaymasterDataMiddlewareOverrideFunction,
+});
+
+
 const userOpData = {
   target: targetAddress, // Replace with the desired target address
   data: "0x0", // Replace with the desired call data
   value: 0n,
 };
 
-const userOpDataOverrides = {
-  paymasterAndData : "0x8808884a280addf81631daf5e868cbe96a048a800000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000006575be1f186b102c5ebcb16dbcad7bfc4a379d9547381ed28638091d5bc7e4279e9c60fa30e2c3b573a6fbfd2d91ff178e5c516d2829139c00f9ee9849e967d7d7131e331b",
-  maxFeePerGas: 225338341822,
-  maxPriorityFeePerGas:10000000,
-  callGasLimit:9100,
-	verificationGasLimit:66745,
-	preVerificationGas:45864,
-}
 
-const resultingUO  = await provider.buildUserOperation(userOpData, userOpDataOverrides);
+const resultingUO  = await provider.buildUserOperation(userOpData);
 console.log("Sending UserOperation: ", resultingUO);
 
 // Send a user operation from your smart contract account
-const opHashResult = await provider.sendUserOperation(userOpData, userOpDataOverrides);
+const opHashResult = await provider.sendUserOperation(userOpData);
 console.log("Resulting UserOperation: ", opHashResult); // Log the user operation hash
 console.log(`Checkout https://jiffyscan.xyz/userOpHash/${opHashResult.hash}?network=${chain.name}`)
 
